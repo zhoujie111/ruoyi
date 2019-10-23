@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+    <th:block th:include="include :: header('Summernote富文本编辑器')" />
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-management-edit" th:object="${tbWebsiteManagement}">
+            <div class="form-group">
+                <input name="id" th:field="*{id}" type="hidden">
+                <label class="col-sm-3 control-label">管理队伍：</label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="management" id="management"/>
+                    <!--富文本数据-->
+                    <div class="summernote" name="management" id="summernote" th:utext ="${tbWebsiteManagement.management}">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: summernote-js" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                lang: 'zh-CN',
+                height: '300px'
+            });
+        });
+
+        var prefix = ctx + "website/management";
+        $("#form-management-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var id=$("#id").val();
+                var summernote = $("#summernote").summernote('code');
+                var data= {id:id,management:summernote};
+                $.operate.save1(prefix + "/edit", data);
+            }
+        }
+    </script>
+</body>
+</html>

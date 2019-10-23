@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.lab.mapper.LabMapper">
+    <resultMap id="result" type="Lab">
+        <id property="id" column="id"/>
+        <result property="labCode" column="lab_code"/>
+        <result property="labAddress" column="lab_address"/>
+        <result property="labStartTime" column="lab_start_time"/>
+        <result property="labEndTime" column="lab_end_time"/>
+        <result property="labCreater" column="lab_creater"/>
+        <result property="labStatus" column="lab_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="labName" column="lab_name"/>
+    </resultMap>
+    <select id="selectAll" parameterType="Lab" resultMap="result">
+        select id,lab_code,lab_address,lab_start_time,lab_end_time,lab_creater,lab_status,create_time,update_time,lab_name from tb_lab
+        <where>
+            <if test="labName!=null and labName!=''">and lab_name=#{labName}</if>
+            <if test="labCode!=null and labCode!=''">and lab_code=#{labCode}</if>
+        </where>
+    </select>
+
+    <insert id="insertLab" parameterType="Lab">
+        insert into tb_lab(lab_code,lab_address,lab_start_time,lab_end_time,create_time,update_time,lab_name,lab_creater)
+        values (#{labCode},#{labAddress},#{labStartTime},#{labEndTime},now(),now(),#{labName},#{labCreater})
+    </insert>
+<!--    <select id="selectAll" parameterType="Lab" resultType="Lab">-->
+<!--        select id, lab_code as labCode, lab_address as labAddress, lab_start_time as labStartTime,-->
+<!--        lab_end_time as labEndTime, lab_creater as labCreater, lab_status as labStatus, create_time as createTime,-->
+<!--        update_time as updateTime, lab_name as labName from tb_lab-->
+<!--        <where>-->
+<!--            <if test="labName!=null and labName!=''">and lab_name=#{labName}</if>-->
+<!--            <if test="labCode!=null and labCode!=''">and lab_code=#{labCode}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+    <delete id="deleteById" parameterType="string">
+        delete from tb_lab
+        where id=#{ids}
+    </delete>
+
+    <delete id="deleteTestByIds" parameterType="list">
+        delete from tb_lab where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectLabById" parameterType="long" resultMap="result">
+        select id, lab_code, lab_address, lab_start_time, lab_end_time, lab_creater, lab_status, create_time, update_time, lab_name
+        from tb_lab
+        where id=#{id}
+    </select>
+
+    <update id="updateLab" parameterType="Lab">
+        update tb_lab
+        set lab_code=#{labCode},lab_address=#{labAddress},lab_name=#{labName},update_time=#{updateTime},lab_start_time=#{labStartTime},
+        lab_end_time=#{labEndTime}
+        where id=#{id}
+    </update>
+
+</mapper>    
+  

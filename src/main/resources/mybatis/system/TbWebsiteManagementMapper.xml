@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.management.mapper.TbWebsiteManagementMapper">
+    
+    <resultMap type="TbWebsiteManagement" id="TbWebsiteManagementResult">
+        <result property="id"    column="id"    />
+        <result property="management"    column="management"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbWebsiteManagementVo">
+        select id, management, create_time, update_time from tb_website_management
+    </sql>
+
+    <select id="selectTbWebsiteManagementList" parameterType="TbWebsiteManagement" resultMap="TbWebsiteManagementResult">
+        <include refid="selectTbWebsiteManagementVo"/>
+        <where>  
+            <if test="management != null  and management != ''"> and management = #{management}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbWebsiteManagementById" parameterType="Long" resultMap="TbWebsiteManagementResult">
+        <include refid="selectTbWebsiteManagementVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbWebsiteManagement" parameterType="TbWebsiteManagement" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_website_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="management != null  and management != ''">management,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="management != null  and management != ''">#{management},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbWebsiteManagement" parameterType="TbWebsiteManagement">
+        update tb_website_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="management != null  and management != ''">management = #{management},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbWebsiteManagementById" parameterType="Long">
+        delete from tb_website_management where id = #{id}
+    </delete>
+
+    <delete id="deleteTbWebsiteManagementByIds" parameterType="String">
+        delete from tb_website_management where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTbManagement" resultMap="TbWebsiteManagementResult">
+        <include refid="selectTbWebsiteManagementVo"/>
+    </select>
+</mapper>

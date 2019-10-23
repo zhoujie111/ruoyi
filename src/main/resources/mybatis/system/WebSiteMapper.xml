@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.website.mapper.WebSiteMapper">
+    <resultMap id="result" type="BackToFrontSite">
+        <id property="id" column="id"/>
+        <result property="websiteType" column="website_type"/>
+        <result column="title" property="title"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result column="title_id" property="titleId"/>
+        <result property="content" column="content"/>
+        <result property="websiteTypeId" column="website_type_id"/>
+        <result property="webSiteTitleName" column="website_title_name"/>
+    </resultMap>
+    <insert id="insert" parameterType="WebSiteVo">
+        insert into tb_website(website_type,title,content,create_time,update_time)
+        values (#{websiteType},#{title},#{content},now(),now())
+    </insert>
+
+    <select id="findTitleByWebsiteId" parameterType="BackToFrontSite" resultMap="result">
+        select id,website_type_id,website_title_name,create_time,update_time
+        from tb_website_title
+        where website_type_id=#{websiteTypeId} order by create_time desc limit 10
+    </select>
+
+    <select id="findTitleByPageWebsiteId" parameterType="BackToFrontSite" resultMap="result">
+        select id,website_type_id,website_title_name,create_time,update_time
+        from tb_website_title
+        where website_type_id=#{websiteTypeId} order by create_time desc
+    </select>
+
+    <select id="findContentByTitleId" parameterType="BackToFrontSite" resultMap="result">
+        select *
+        from tb_website_title
+        where id=#{id}
+    </select>
+
+</mapper>    
+  

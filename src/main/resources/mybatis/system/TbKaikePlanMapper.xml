@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.kaikeplan.mapper.TbKaikePlanMapper">
+    
+    <resultMap type="TbKaikePlan" id="TbKaikePlanResult">
+        <result property="id"    column="id"    />
+        <result property="kaikeName"    column="kaike_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="courseTeacher"    column="course_teacher"    />
+        <result property="courseTime"    column="course_time"    />
+        <result property="courseAddress"    column="course_address"    />
+        <result property="fabuState"    column="fabu_state"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbKaikePlanVo">
+        select id, kaike_name, course_name, course_teacher, course_time, course_address, fabu_state, create_time, update_time from tb_kaike_plan
+    </sql>
+
+    <select id="selectTbKaikePlanList" parameterType="TbKaikePlan" resultMap="TbKaikePlanResult">
+        <include refid="selectTbKaikePlanVo"/>
+        <where>  
+            <if test="kaikeName != null  and kaikeName != ''"> and kaike_name like concat('%', #{kaikeName}, '%')</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="courseTeacher != null  and courseTeacher != ''"> and course_teacher = #{courseTeacher}</if>
+            <if test="courseTime != null "> and course_time = #{courseTime}</if>
+            <if test="courseAddress != null  and courseAddress != ''"> and course_address = #{courseAddress}</if>
+            <if test="fabuState != null "> and fabu_state = #{fabuState}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbKaikePlanById" parameterType="Long" resultMap="TbKaikePlanResult">
+        <include refid="selectTbKaikePlanVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbKaikePlan" parameterType="TbKaikePlan" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_kaike_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kaikeName != null  and kaikeName != ''">kaike_name,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">course_teacher,</if>
+            <if test="courseTime != null ">course_time,</if>
+            <if test="courseAddress != null  and courseAddress != ''">course_address,</if>
+            <if test="fabuState != null ">fabu_state,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kaikeName != null  and kaikeName != ''">#{kaikeName},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">#{courseTeacher},</if>
+            <if test="courseTime != null ">#{courseTime},</if>
+            <if test="courseAddress != null  and courseAddress != ''">#{courseAddress},</if>
+            <if test="fabuState != null ">#{fabuState},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbKaikePlan" parameterType="TbKaikePlan">
+        update tb_kaike_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="kaikeName != null  and kaikeName != ''">kaike_name = #{kaikeName},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">course_teacher = #{courseTeacher},</if>
+            <if test="courseTime != null ">course_time = #{courseTime},</if>
+            <if test="courseAddress != null  and courseAddress != ''">course_address = #{courseAddress},</if>
+            <if test="fabuState != null ">fabu_state = #{fabuState},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbKaikePlanById" parameterType="Long">
+        delete from tb_kaike_plan where id = #{id}
+    </delete>
+
+    <delete id="deleteTbKaikePlanByIds" parameterType="String">
+        delete from tb_kaike_plan where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

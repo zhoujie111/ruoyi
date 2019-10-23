@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.kaikecheck.mapper.TbKaikeCheckMapper">
+    
+    <resultMap type="TbKaikeCheck" id="TbKaikeCheckResult">
+        <result property="id"    column="id"    />
+        <result property="kaikeCourse"    column="kaike_course"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="courseTeacher"    column="course_teacher"    />
+        <result property="targetSelectCourse"    column="target_select_course"    />
+        <result property="selectCourse"    column="select_course"    />
+        <result property="fabuState"    column="fabu_state"    />
+        <result property="kaikeState"    column="kaike_state"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbKaikeCheckVo">
+        select id, kaike_course, course_name, course_teacher, target_select_course, select_course, fabu_state, kaike_state, create_time, update_time from tb_kaike_check
+    </sql>
+
+    <select id="selectTbKaikeCheckList" parameterType="TbKaikeCheck" resultMap="TbKaikeCheckResult">
+        <include refid="selectTbKaikeCheckVo"/>
+        <where>  
+            <if test="kaikeCourse != null  and kaikeCourse != ''"> and kaike_course = #{kaikeCourse}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="courseTeacher != null  and courseTeacher != ''"> and course_teacher = #{courseTeacher}</if>
+            <if test="targetSelectCourse != null "> and target_select_course = #{targetSelectCourse}</if>
+            <if test="selectCourse != null  and selectCourse != ''"> and select_course = #{selectCourse}</if>
+            <if test="fabuState != null "> and fabu_state = #{fabuState}</if>
+            <if test="kaikeState != null "> and kaike_state = #{kaikeState}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbKaikeCheckById" parameterType="Long" resultMap="TbKaikeCheckResult">
+        <include refid="selectTbKaikeCheckVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbKaikeCheck" parameterType="TbKaikeCheck" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_kaike_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kaikeCourse != null  and kaikeCourse != ''">kaike_course,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">course_teacher,</if>
+            <if test="targetSelectCourse != null ">target_select_course,</if>
+            <if test="selectCourse != null  and selectCourse != ''">select_course,</if>
+            <if test="fabuState != null ">fabu_state,</if>
+            <if test="kaikeState != null ">kaike_state,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kaikeCourse != null  and kaikeCourse != ''">#{kaikeCourse},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">#{courseTeacher},</if>
+            <if test="targetSelectCourse != null ">#{targetSelectCourse},</if>
+            <if test="selectCourse != null  and selectCourse != ''">#{selectCourse},</if>
+            <if test="fabuState != null ">#{fabuState},</if>
+            <if test="kaikeState != null ">#{kaikeState},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbKaikeCheck" parameterType="TbKaikeCheck">
+        update tb_kaike_check
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="kaikeCourse != null  and kaikeCourse != ''">kaike_course = #{kaikeCourse},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="courseTeacher != null  and courseTeacher != ''">course_teacher = #{courseTeacher},</if>
+            <if test="targetSelectCourse != null ">target_select_course = #{targetSelectCourse},</if>
+            <if test="selectCourse != null  and selectCourse != ''">select_course = #{selectCourse},</if>
+            <if test="fabuState != null ">fabu_state = #{fabuState},</if>
+            <if test="kaikeState != null ">kaike_state = #{kaikeState},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbKaikeCheckById" parameterType="Long">
+        delete from tb_kaike_check where id = #{id}
+    </delete>
+
+    <delete id="deleteTbKaikeCheckByIds" parameterType="String">
+        delete from tb_kaike_check where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

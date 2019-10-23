@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改开课审核')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-check-edit" th:object="${tbKaikeCheck}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开课课程：</label>
+                <div class="col-sm-8">
+                    <input name="kaikeCourse" th:field="*{kaikeCourse}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">课程名称：</label>
+                <div class="col-sm-8">
+                    <input name="courseName" th:field="*{courseName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">课程教师：</label>
+                <div class="col-sm-8">
+                    <input name="courseTeacher" th:field="*{courseTeacher}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">目标选修人数：</label>
+                <div class="col-sm-8">
+                    <input name="targetSelectCourse" th:field="*{targetSelectCourse}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实际选修人数：</label>
+                <div class="col-sm-8">
+                    <input name="selectCourse" th:field="*{selectCourse}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发布状态：</label>
+                <div class="col-sm-8">
+                    <input name="fabuState" th:field="*{fabuState}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开课状态：</label>
+                <div class="col-sm-8">
+                    <input name="kaikeState" th:field="*{kaikeState}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "website/kaikeplan";
+        $("#form-check-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-check-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

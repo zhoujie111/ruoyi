@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('Summernote富文本编辑器')" />
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="gray-bg">
+<form id="form">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                    </div>  <h4>栏目分类</h4>
+                    <!--bootstrap-select下拉框-->
+                    <select class="form-control noselect2 selectpicker" name="websiteType" id="websiteType" >
+                        <option value="">--请选择栏目大类--</option>
+                        <option  th:each="c:${list1}"  th:value="${c.id}" th:text="${c.websiteTypeName}" value="1">蔬菜</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                    </div>  <h4>栏目标题</h4>
+                    <div class="ibox-content no-padding">
+                        <input type="text" style="width:100%" name="title" id="title">
+                        <!--网站栏目内容-->
+
+                        </input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                    </div>  <h4>栏目内容</h4>
+                    <div class="ibox-content no-padding">
+                        <input type="hidden" name="content" id="content"/>
+                        <div class="summernote" name="content" id="summernote" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input  style="margin-left: 550px" class="btn btn-success" type="button" onclick="su();" value="提交" >
+    </div>
+</form>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: summernote-js" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            lang: 'zh-CN',
+            height: '300px'
+        });
+    });
+        function su() {
+            var title=$("#title").val();
+            var websiteType =$("#websiteType").val();
+            var summernote = $("#summernote").summernote('code');
+            var data= {websiteType:websiteType,title:title,content:summernote};
+            $.ajax({
+                //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/website/content/add" ,//url
+                contentType:"application/json",
+                data:JSON.stringify(data),
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.status == 0) {
+                        //友好提示
+                        layer.msg("新增栏目内容成功", {icon: 6});
+                    }
+                },
+                error : function() {
+                    alert("异常！");
+                }
+            });
+        }
+    var edit = function () {
+        $("#eg").addClass("no-padding");
+        $('.click2edit').summernote({
+            lang: 'zh-CN',
+            focus: true
+        });
+    };
+    var save = function () {
+        $("#eg").removeClass("no-padding");
+        var aHTML = $('.click2edit').summernote('code');
+        $('.click2edit').summernote('destroy');
+    };
+</script>
+</body>
+</html>

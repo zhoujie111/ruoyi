@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.websitetitle.mapper.TbWebsiteTitleMapper">
+    
+    <resultMap type="TbWebsiteTitle" id="TbWebsiteTitleResult">
+        <result property="id"    column="id"    />
+        <result property="websiteTitleName"    column="website_title_name"    />
+        <result property="websiteTypeId"    column="website_type_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <sql id="selectTbWebsiteTitleVo">
+        select id, website_title_name, website_type_id, create_time, update_time,content from tb_website_title
+    </sql>
+
+    <select id="selectTbWebsiteTitleList" parameterType="TbWebsiteTitle" resultMap="TbWebsiteTitleResult">
+        <include refid="selectTbWebsiteTitleVo"/>
+        <where>  
+            <if test="websiteTitleName != null  and websiteTitleName != ''"> and website_title_name like concat('%', #{websiteTitleName}, '%')</if>
+            <if test="websiteTypeId != null "> and website_type_id = #{websiteTypeId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbWebsiteTitleById" parameterType="Long" resultMap="TbWebsiteTitleResult">
+        <include refid="selectTbWebsiteTitleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbWebsiteTitle" parameterType="TbWebsiteTitle" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_website_title
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="websiteTitleName != null  and websiteTitleName != ''">website_title_name,</if>
+            <if test="websiteTypeId != null ">website_type_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="content != null">content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="websiteTitleName != null  and websiteTitleName != ''">#{websiteTitleName},</if>
+            <if test="websiteTypeId != null ">#{websiteTypeId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateTime != null ">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbWebsiteTitle" parameterType="TbWebsiteTitle">
+        update tb_website_title
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="websiteTitleName != null  and websiteTitleName != ''">website_title_name = #{websiteTitleName},</if>
+            <if test="websiteTypeId != null ">website_type_id = #{websiteTypeId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="content != null">content = #{content},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbWebsiteTitleById" parameterType="Long">
+        delete from tb_website_title where id = #{id}
+    </delete>
+
+    <delete id="deleteTbWebsiteTitleByIds" parameterType="String">
+        delete from tb_website_title where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

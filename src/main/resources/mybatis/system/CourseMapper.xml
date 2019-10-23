@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.course.mapper.CourseMapper">
+    <resultMap type="Course" id="CourseResult">
+        <result property="id"    column="id"    />
+        <result property="experimentName"    column="experiment_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="experimentStartTime"    column="experiment_start_time"    />
+        <result property="experimentEndTime"    column="experiment_end_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <sql id="selectTbCourseVo">
+        select id, experiment_name, course_name, experiment_start_time, experiment_end_time, create_time, update_time from tb_course
+    </sql>
+    <select id="selectCourseList" parameterType="Course" resultMap="CourseResult">
+        <include refid="selectTbCourseVo"/>
+        <where>
+            <if test="experimentName != null  and experimentName != ''"> and experiment_name like concat('%', #{experimentName}, '%')</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="experimentStartTime != null "> and experiment_start_time = #{experimentStartTime}</if>
+            <if test="experimentEndTime != null "> and experiment_end_time = #{experimentEndTime}</if>
+        </where>
+    </select>
+
+    <insert id="insertCourse" parameterType="Course" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_course(experiment_name, course_name, experiment_start_time, experiment_end_time, create_time, update_time)
+        values (#{experimentName},#{courseName},#{experimentStartTime},#{experimentEndTime},now(),now())
+    </insert>
+
+    <select id="selectCourseById" parameterType="Long" resultMap="CourseResult">
+        <include refid="selectTbCourseVo"/>
+        where id = #{id}
+    </select>
+
+    <update id="updateCourse" parameterType="Course">
+        update tb_course set experiment_name = #{experimentName},course_name = #{courseName},experiment_start_time = #{experimentStartTime},
+        experiment_end_time = #{experimentEndTime},update_time=now()
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseByIds" parameterType="String">
+        delete from tb_course where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>    
+  

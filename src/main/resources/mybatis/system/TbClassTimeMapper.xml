@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.classtime.mapper.TbClassTimeMapper">
+    
+    <resultMap type="TbClassTime" id="TbClassTimeResult">
+        <result property="id"    column="id"    />
+        <result property="section"    column="section"    />
+        <result property="classStartTime"    column="class_start_time"    />
+        <result property="classEndTime"    column="class_end_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbClassTimeVo">
+        select id, section, class_start_time, class_end_time, create_time, update_time from tb_class_time
+    </sql>
+
+    <select id="selectTbClassTimeList" parameterType="TbClassTime" resultMap="TbClassTimeResult">
+        <include refid="selectTbClassTimeVo"/>
+        <where>  
+            <if test="section != null  and section != ''"> and section = #{section}</if>
+            <if test="classStartTime != null "> and class_start_time = #{classStartTime}</if>
+            <if test="classEndTime != null "> and class_end_time = #{classEndTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbClassTimeById" parameterType="Long" resultMap="TbClassTimeResult">
+        <include refid="selectTbClassTimeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbClassTime" parameterType="TbClassTime" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_class_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="section != null  and section != ''">section,</if>
+            <if test="classStartTime != null ">class_start_time,</if>
+            <if test="classEndTime != null ">class_end_time,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="section != null  and section != ''">#{section},</if>
+            <if test="classStartTime != null ">#{classStartTime},</if>
+            <if test="classEndTime != null ">#{classEndTime},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbClassTime" parameterType="TbClassTime">
+        update tb_class_time
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="section != null  and section != ''">section = #{section},</if>
+            <if test="classStartTime != null ">class_start_time = #{classStartTime},</if>
+            <if test="classEndTime != null ">class_end_time = #{classEndTime},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbClassTimeById" parameterType="Long">
+        delete from tb_class_time where id = #{id}
+    </delete>
+
+    <delete id="deleteTbClassTimeByIds" parameterType="String">
+        delete from tb_class_time where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

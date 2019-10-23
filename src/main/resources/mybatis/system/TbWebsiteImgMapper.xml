@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.websiteimg.mapper.TbWebsiteImgMapper">
+    
+    <resultMap type="TbWebsiteImg" id="TbWebsiteImgResult">
+        <result property="id"    column="id"    />
+        <result property="imageName"    column="image_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="src"    column="src"    />
+    </resultMap>
+
+    <sql id="selectTbWebsiteImgVo">
+        select id, image_name, create_time, update_time, src from tb_website_img
+    </sql>
+
+    <select id="selectTbWebsiteImgList" parameterType="TbWebsiteImg" resultMap="TbWebsiteImgResult">
+        <include refid="selectTbWebsiteImgVo"/>
+        <where>  
+            <if test="imageName != null  and imageName != ''"> and image_name like concat('%', #{imageName}, '%')</if>
+            <if test="src != null  and src != ''"> and src = #{src}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbWebsiteImgById" parameterType="Long" resultMap="TbWebsiteImgResult">
+        <include refid="selectTbWebsiteImgVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbWebsiteImg" parameterType="TbWebsiteImg" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_website_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="imageName != null  and imageName != ''">image_name,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="src != null  and src != ''">src,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="imageName != null  and imageName != ''">#{imageName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="src != null  and src != ''">#{src},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbWebsiteImg" parameterType="TbWebsiteImg">
+        update tb_website_img set image_name = #{imageName},update_time = now(),src = #{src}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbWebsiteImgById" parameterType="Long">
+        delete from tb_website_img where id = #{id}
+    </delete>
+
+    <delete id="deleteTbWebsiteImgByIds" parameterType="String">
+        delete from tb_website_img where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="TbWebsiteImg">
+        insert into tb_website_img(image_name,src,create_time,update_time)
+        values (#{imageName},#{uploadPath},now(),now())
+    </insert>
+
+    <select id="findRecentFour" resultType="string">
+        select src
+        from tb_website_img
+        order by create_time desc
+    </select>
+    
+</mapper>

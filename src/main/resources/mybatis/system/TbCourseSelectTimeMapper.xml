@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.courseselcttime.mapper.TbCourseSelectTimeMapper">
+    
+    <resultMap type="TbCourseSelectTime" id="TbCourseSelectTimeResult">
+        <result property="id"    column="id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="studentTypeId"    column="student_type_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbCourseSelectTimeVo">
+        select id, start_time, end_time, student_type_id, create_time, update_time from tb_course_select_time
+    </sql>
+
+    <select id="selectTbCourseSelectTimeList" parameterType="TbCourseSelectTime" resultMap="TbCourseSelectTimeResult">
+        <include refid="selectTbCourseSelectTimeVo"/>
+        <where>  
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="studentTypeId != null "> and student_type_id = #{studentTypeId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbCourseSelectTimeById" parameterType="Long" resultMap="TbCourseSelectTimeResult">
+        <include refid="selectTbCourseSelectTimeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbCourseSelectTime" parameterType="TbCourseSelectTime" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_course_select_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="studentTypeId != null ">student_type_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="studentTypeId != null ">#{studentTypeId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbCourseSelectTime" parameterType="TbCourseSelectTime">
+        update tb_course_select_time
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="studentTypeId != null ">student_type_id = #{studentTypeId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbCourseSelectTimeById" parameterType="Long">
+        delete from tb_course_select_time where id = #{id}
+    </delete>
+
+    <delete id="deleteTbCourseSelectTimeByIds" parameterType="String">
+        delete from tb_course_select_time where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增角色')" />
+    <th:block th:include="include :: header('日期和时间')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-lab-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">实验室名称：</label>
+            <div class="col-sm-7">
+                <input class="form-control" type="text" name="labName" id="labName" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">实验室编号：</label>
+            <div class="col-sm-7">
+                <input class="form-control" type="text" name="labCode" id="labCode" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">实验室地址：</label>
+            <div class="col-sm-7">
+                <input class="form-control" type="text" name="labAddress" id="labAddress" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">开始时间：</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="labStartTime" placeholder="yyyy-MM-dd HH:mm:ss" name="labStartTime">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">结束时间：</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="labEndTime" placeholder="yyyy-MM-dd HH:mm:ss" name="labEndTime">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    $(function(){
+        <!-- datetimepicker示例 -->
+        $("#labStartTime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true
+        });
+
+        $("#labEndTime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true
+        });
+    });
+
+    $("#form-role-add").validate({
+        rules:{
+            onkeyup: false,
+            roleName:{
+                remote: {
+                    url: ctx + "system/role/checkRoleNameUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "roleName" : function() {
+                            return $.common.trim($("#roleName").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            roleKey:{
+                remote: {
+                    url: ctx + "system/role/checkRoleKeyUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "roleKey" : function() {
+                            return $.common.trim($("#roleKey").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            roleSort:{
+                digits:true
+            },
+        },
+        messages: {
+            "roleName": {
+                remote: "角色名称已经存在"
+            },
+            "roleKey": {
+                remote: "角色权限已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            add();
+        }
+    }
+    function add() {
+        var labName = $("input[name='labName']").val();
+        var labCode = $("input[name='labCode']").val();
+        var labAddress = $("input[name='labAddress']").val();
+        var labStartTime = $("input[name='labStartTime']").val();
+        var labEndTime = $("input[name='labEndTime']").val();
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : ctx + "lab/add",
+            data : {
+                "labName": labName,
+                "labCode": labCode,
+                "labAddress": labAddress,
+                "labStartTime": labStartTime,
+                "labEndTime": labEndTime,
+            },
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+                $.operate.successCallback(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

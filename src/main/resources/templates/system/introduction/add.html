@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+    <th:block th:include="include :: header('Summernote富文本编辑器')" />
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-introduction-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">中心介绍：</label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="content" id="content"/>
+                    <!--富文本数据-->
+                    <div class="summernote" name="centerIntroduction" id="summernote" >
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: summernote-js" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                lang: 'zh-CN',
+                height: '300px'
+            });
+        });
+
+        var prefix = ctx + "website/introduction"
+        $("#form-introduction-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                //富文本数据上传 todo
+                var summernote = $("#summernote").summernote('code');
+                var data= {centerIntroduction:summernote};
+                $.operate.save1(prefix + "/add",data);
+            }
+        }
+    </script>
+</body>
+</html>

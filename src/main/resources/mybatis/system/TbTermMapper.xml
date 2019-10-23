@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.term.mapper.TbTermMapper">
+    
+    <resultMap type="TbTerm" id="TbTermResult">
+        <result property="id"    column="id"    />
+        <result property="term"    column="term"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="schoolYear"    column="school_year"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbTermVo">
+        select id, term, start_time, end_time, school_year, create_time, update_time from tb_term
+    </sql>
+
+    <select id="selectTbTermList" parameterType="TbTerm" resultMap="TbTermResult">
+        <include refid="selectTbTermVo"/>
+        <where>  
+            <if test="term != null  and term != ''"> and term = #{term}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="schoolYear != null  and schoolYear != ''"> and school_year = #{schoolYear}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbTermById" parameterType="Long" resultMap="TbTermResult">
+        <include refid="selectTbTermVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbTerm" parameterType="TbTerm" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_term
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="term != null  and term != ''">term,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="schoolYear != null  and schoolYear != ''">school_year,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="term != null  and term != ''">#{term},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="schoolYear != null  and schoolYear != ''">#{schoolYear},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbTerm" parameterType="TbTerm">
+        update tb_term
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="term != null  and term != ''">term = #{term},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="schoolYear != null  and schoolYear != ''">school_year = #{schoolYear},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbTermById" parameterType="Long">
+        delete from tb_term where id = #{id}
+    </delete>
+
+    <delete id="deleteTbTermByIds" parameterType="String">
+        delete from tb_term where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

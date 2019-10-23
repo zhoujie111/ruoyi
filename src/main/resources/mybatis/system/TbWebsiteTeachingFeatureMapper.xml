@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.teachfeature.mapper.TbWebsiteTeachingFeatureMapper">
+    
+    <resultMap type="TbWebsiteTeachingFeature" id="TbWebsiteTeachingFeatureResult">
+        <result property="id"    column="id"    />
+        <result property="teachingFeature"    column="teaching_feature"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbWebsiteTeachingFeatureVo">
+        select id, teaching_feature, create_time, update_time from tb_website_teaching_feature
+    </sql>
+
+    <select id="selectTbWebsiteTeachingFeatureList" parameterType="TbWebsiteTeachingFeature" resultMap="TbWebsiteTeachingFeatureResult">
+        <include refid="selectTbWebsiteTeachingFeatureVo"/>
+        <where>  
+            <if test="teachingFeature != null  and teachingFeature != ''"> and teaching_feature = #{teachingFeature}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbWebsiteTeachingFeatureById" parameterType="Long" resultMap="TbWebsiteTeachingFeatureResult">
+        <include refid="selectTbWebsiteTeachingFeatureVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbWebsiteTeachingFeature" parameterType="TbWebsiteTeachingFeature" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_website_teaching_feature
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teachingFeature != null  and teachingFeature != ''">teaching_feature,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teachingFeature != null  and teachingFeature != ''">#{teachingFeature},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbWebsiteTeachingFeature" parameterType="TbWebsiteTeachingFeature">
+        update tb_website_teaching_feature
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teachingFeature != null  and teachingFeature != ''">teaching_feature = #{teachingFeature},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbWebsiteTeachingFeatureById" parameterType="Long">
+        delete from tb_website_teaching_feature where id = #{id}
+    </delete>
+
+    <delete id="deleteTbWebsiteTeachingFeatureByIds" parameterType="String">
+        delete from tb_website_teaching_feature where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTbTeachFeature" resultMap="TbWebsiteTeachingFeatureResult">
+        <include refid="selectTbWebsiteTeachingFeatureVo"/>
+    </select>
+    
+</mapper>

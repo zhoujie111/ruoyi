@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.websitecenternews.mapper.TbWebsiteCenterNewsMapper">
+    
+    <resultMap type="TbWebsiteCenterNews" id="TbWebsiteCenterNewsResult">
+        <result property="id"    column="id"    />
+        <result property="centerNews"    column="center_news"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbWebsiteCenterNewsVo">
+        select id, center_news, create_time, update_time from tb_website_center_news
+    </sql>
+
+    <select id="selectTbWebsiteCenterNewsList" parameterType="TbWebsiteCenterNews" resultMap="TbWebsiteCenterNewsResult">
+        <include refid="selectTbWebsiteCenterNewsVo"/>
+        <where>  
+            <if test="centerNews != null  and centerNews != ''"> and center_news = #{centerNews}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbWebsiteCenterNewsById" parameterType="Long" resultMap="TbWebsiteCenterNewsResult">
+        <include refid="selectTbWebsiteCenterNewsVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="findCenterNews" resultMap="TbWebsiteCenterNewsResult">
+        <include refid="selectTbWebsiteCenterNewsVo"/>
+    </select>
+        
+    <insert id="insertTbWebsiteCenterNews" parameterType="TbWebsiteCenterNews" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_website_center_news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="centerNews != null  and centerNews != ''">center_news,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="centerNews != null  and centerNews != ''">#{centerNews},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbWebsiteCenterNews" parameterType="TbWebsiteCenterNews">
+        update tb_website_center_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="centerNews != null  and centerNews != ''">center_news = #{centerNews},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbWebsiteCenterNewsById" parameterType="Long">
+        delete from tb_website_center_news where id = #{id}
+    </delete>
+
+    <delete id="deleteTbWebsiteCenterNewsByIds" parameterType="String">
+        delete from tb_website_center_news where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    
+</mapper>

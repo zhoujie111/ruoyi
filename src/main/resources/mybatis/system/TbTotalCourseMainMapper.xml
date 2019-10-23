@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.jiaowu.totalcoursemain.mapper.TbTotalCourseMainMapper">
+    
+    <resultMap type="TbTotalCourseMain" id="TbTotalCourseMainResult">
+        <result property="id"    column="id"    />
+        <result property="courseCode"    column="course_code"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="studyTime"    column="study_time"    />
+        <result property="studyScore"    column="study_score"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="tbClass"    column="tb_class"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbTotalCourseMainVo">
+        select id, course_code, course_name, study_time, study_score, teacher_name, tb_class, create_time, update_time from tb_total_course_main
+    </sql>
+
+    <select id="selectTbTotalCourseMainList" parameterType="TbTotalCourseMain" resultMap="TbTotalCourseMainResult">
+        <include refid="selectTbTotalCourseMainVo"/>
+        <where>  
+            <if test="courseCode != null  and courseCode != ''"> and course_code = #{courseCode}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="studyTime != null "> and study_time = #{studyTime}</if>
+            <if test="studyScore != null "> and study_score = #{studyScore}</if>
+            <if test="teacherName != null "> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="tbClass != null  and tbClass != ''"> and tb_class = #{tbClass}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbTotalCourseMainById" parameterType="Long" resultMap="TbTotalCourseMainResult">
+        <include refid="selectTbTotalCourseMainVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbTotalCourseMain" parameterType="TbTotalCourseMain" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_total_course_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseCode != null  and courseCode != ''">course_code,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="studyTime != null ">study_time,</if>
+            <if test="studyScore != null ">study_score,</if>
+            <if test="teacherName != null ">teacher_name,</if>
+            <if test="tbClass != null  and tbClass != ''">tb_class,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseCode != null  and courseCode != ''">#{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="studyTime != null ">#{studyTime},</if>
+            <if test="studyScore != null ">#{studyScore},</if>
+            <if test="teacherName != null ">#{teacherName},</if>
+            <if test="tbClass != null  and tbClass != ''">#{tbClass},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbTotalCourseMain" parameterType="TbTotalCourseMain">
+        update tb_total_course_main
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseCode != null  and courseCode != ''">course_code = #{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="studyTime != null ">study_time = #{studyTime},</if>
+            <if test="studyScore != null ">study_score = #{studyScore},</if>
+            <if test="teacherName != null ">teacher_name = #{teacherName},</if>
+            <if test="tbClass != null  and tbClass != ''">tb_class = #{tbClass},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbTotalCourseMainById" parameterType="Long">
+        delete from tb_total_course_main where id = #{id}
+    </delete>
+
+    <delete id="deleteTbTotalCourseMainByIds" parameterType="String">
+        delete from tb_total_course_main where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
