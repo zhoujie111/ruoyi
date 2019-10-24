@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>若依系统首页</title>
+    <title>虚拟仿真实验平台</title>
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
@@ -250,7 +250,7 @@
 <script th:src="@{/ruoyi/index.js}"></script>
 <script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
 <script th:inline="javascript">
-var ctx = [[@{/}]];
+	var ctx = [[@{/}]];
 	var skin = storage.get("skin");
 // 本地主题优先，未设置取系统配置
 	if ($.common.isNotEmpty(skin)) {
@@ -263,15 +263,17 @@ var ctx = [[@{/}]];
 		$("body").addClass(skinName);
 	}
 
-	function showTime(){
-		var nowtime=new Date();
-		var year=nowtime.getFullYear();
-		var month=nowtime.getMonth()+1;
-		var date=nowtime.getDate();
-		document.getElementById("time").innerText=year+"年"+month+"月"+date+"日"+" "+nowtime.toLocaleTimeString();
+	function showTime() {
+		var nowtime = new Date();
+		var year = nowtime.getFullYear();
+		var month = nowtime.getMonth() + 1;
+		var date = nowtime.getDate();
+		document.getElementById("time").innerText = year + "年" + month + "月" + date + "日" + " " + nowtime.toLocaleTimeString();
 	}
+
 	//每1秒钟显示当前时间
-	setInterval("showTime()",1000);
+	setInterval("showTime()", 1000);
+
 	/* 用户管理-重置密码 */
 	function resetPwd() {
 		var url = ctx + 'system/user/profile/resetPwd';
@@ -296,7 +298,7 @@ var ctx = [[@{/}]];
 			$('a[href$="' + url + '"]').parent("li").addClass("selected").parents("li").addClass("active").end().parents("ul").addClass("in");
 			$('a[href$="' + url + '"]').click();
 		}
-	});
+	})
 </script>
 </body>
 </html>
