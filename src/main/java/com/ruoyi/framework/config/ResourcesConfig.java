@@ -40,6 +40,7 @@ public class ResourcesConfig implements WebMvcConfigurer
     public void addResourceHandlers(ResourceHandlerRegistry registry)
     {
         registry.addResourceHandler("/image/**").addResourceLocations("file:D:/ruoyi/uploadPath/image/" );
+        registry.addResourceHandler("/profile/**").addResourceLocations("file:/Users/zhoujie/profile" );
         /** 本地文件上传路径 */
         registry.addResourceHandler(Constants.RESOURCE_PREFIX + "/**").addResourceLocations("file:" + RuoYiConfig.getProfile() + "/");
 
